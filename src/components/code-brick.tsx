@@ -12,7 +12,6 @@ interface CodeBrickProps {
 
 const CodeBrick: React.FC<CodeBrickProps> = ({ brick }) => {
   const [code, setCode] = useState("");
-  const [input, setInput] = useState("");
   const [err, setErr] = useState("");
 
   const { updateBrick } = useActions();
@@ -33,7 +32,11 @@ const CodeBrick: React.FC<CodeBrickProps> = ({ brick }) => {
   return (
     <Resizeable direction="vertical">
       <section
-        style={{ height: "100%", display: "flex", flexDirection: "row" }}
+        style={{
+          height: "calc(100% - 10px)",
+          display: "flex",
+          flexDirection: "row",
+        }}
       >
         <Resizeable direction="horizontal">
           <CodeEditor

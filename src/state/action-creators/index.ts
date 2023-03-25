@@ -39,7 +39,7 @@ export const moveBrick = (
 };
 
 export const insertBrickBefore = (
-  id: string,
+  id: string | null,
   brickType: BrickTypes
 ): InsertBrickBeforeAction => {
   return {
