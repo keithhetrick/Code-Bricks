@@ -45,10 +45,32 @@ const reducer = produce((state: BricksState = initialState, action: Action) => {
 
       return;
     case ActionType.INSERT_BRICK_BEFORE:
+      const brick: Brick = {
+        content: "",
+        type: action.payload.type,
+        id: randomIdGenerator,
+      };
+
+      state.data[brick.id] = brick;
+
+      const foundIndex = state.order.findIndex(
+        (id) => id === action.payload.id
+      );
+
+      if (foundIndex < 0) {
+        state.order.push(brick.id);
+      } else {
+        state.order.splice(foundIndex, 0, brick.id);
+      }
+
       return state;
     default:
       return state;
   }
 });
+
+const randomIdGenerator = () => {
+  return Math.random().toString(36).substr(2, 5); // this line is fuego 🔥 🔥
+};
 
 export default reducer;
