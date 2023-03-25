@@ -16,8 +16,8 @@ export interface DeleteBrickAction {
   payload: string;
 }
 
-export interface InsertBrickBeforeAction {
-  type: ActionType.INSERT_BRICK_BEFORE;
+export interface InsertBrickAfterAction {
+  type: ActionType.INSERT_BRICK_AFTER;
   payload: {
     id: string | null;
     type: BrickTypes;
@@ -35,5 +35,5 @@ export interface UpdateBrickAction {
 export type Action =
   | MoveBrickAction
   | DeleteBrickAction
-  | InsertBrickBeforeAction
+  | InsertBrickAfterAction
   | UpdateBrickAction;

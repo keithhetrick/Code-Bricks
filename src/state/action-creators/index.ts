@@ -3,7 +3,7 @@ import {
   UpdateBrickAction,
   DeleteBrickAction,
   MoveBrickAction,
-  InsertBrickBeforeAction,
+  InsertBrickAfterAction,
   Direction,
 } from "../actions";
 import { BrickTypes } from "../brick";
@@ -38,12 +38,12 @@ export const moveBrick = (
   };
 };
 
-export const insertBrickBefore = (
+export const insertBrickAfter = (
   id: string | null,
   brickType: BrickTypes
-): InsertBrickBeforeAction => {
+): InsertBrickAfterAction => {
   return {
-    type: ActionType.INSERT_BRICK_BEFORE,
+    type: ActionType.INSERT_BRICK_AFTER,
     payload: {
       id,
       type: brickType,

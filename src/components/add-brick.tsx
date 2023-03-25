@@ -2,31 +2,31 @@ import "./add-brick.css";
 import { useActions } from "../hooks/use-actions";
 
 interface AddBrickProps {
-  nextBrickId: string | null;
+  newBrickId: string | null;
   forceVisible?: boolean;
 }
 
-const AddBrick: React.FC<AddBrickProps> = ({ nextBrickId, forceVisible }) => {
-  const { insertBrickBefore } = useActions();
+const AddBrick: React.FC<AddBrickProps> = ({ newBrickId, forceVisible }) => {
+  const { insertBrickAfter } = useActions();
 
   return (
     <div className={`add-brick ${forceVisible ? "force-visible" : false}`}>
       <div className="add-buttons">
         <button
           className="button is-rounded is-primary is-small"
-          onClick={() => insertBrickBefore(nextBrickId, "code")}
+          onClick={() => insertBrickAfter(newBrickId, "code")}
         >
           <span className="icon is-small">
-            <i className="fas fa-plus" />
+            <img src="brick.svg" alt="code" />
           </span>
           <span>Code</span>
         </button>
         <button
           className="button is-rounded is-primary is-small"
-          onClick={() => insertBrickBefore(nextBrickId, "text")}
+          onClick={() => insertBrickAfter(newBrickId, "text")}
         >
           <span className="icon is-small">
-            <i className="fas fa-plus" />
+            <img src="markdown.svg" alt="code" />
           </span>
           <span>Text</span>
         </button>

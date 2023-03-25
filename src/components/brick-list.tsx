@@ -10,15 +10,15 @@ const BrickList: React.FC = () => {
 
   const renderedBricks = bricks.map((brick) => (
     <Fragment key={brick.id}>
-      <AddBrick nextBrickId={brick.id} />
       <BrickListItem brick={brick} />
+      <AddBrick newBrickId={brick.id} />
     </Fragment>
   ));
 
   return (
     <section>
+      <AddBrick forceVisible={bricks.length === 0} newBrickId={null} />
       {renderedBricks}
-      <AddBrick forceVisible={bricks.length === 0} nextBrickId={null} />
     </section>
   );
 };

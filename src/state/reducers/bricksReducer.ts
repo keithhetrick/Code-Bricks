@@ -44,7 +44,7 @@ const reducer = produce((state: BricksState = initialState, action: Action) => {
       state.order[targetIndex] = action.payload.id;
 
       return;
-    case ActionType.INSERT_BRICK_BEFORE:
+    case ActionType.INSERT_BRICK_AFTER:
       const brick: Brick = {
         content: "",
         type: action.payload.type,
@@ -58,9 +58,9 @@ const reducer = produce((state: BricksState = initialState, action: Action) => {
       );
 
       if (foundIndex < 0) {
-        state.order.push(brick.id);
+        state.order.unshift(brick.id);
       } else {
-        state.order.splice(foundIndex, 0, brick.id);
+        state.order.splice(foundIndex + 1, 0, brick.id);
       }
 
       return state;

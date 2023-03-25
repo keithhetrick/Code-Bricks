@@ -5,6 +5,11 @@
   margin: 10px 0;
 }
 
+.add-brick:active {
+  opacity: 0 !important;
+  transition: opacity 0s;
+}
+
 .add-brick:hover {
   opacity: 1;
 }
