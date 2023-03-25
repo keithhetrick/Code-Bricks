@@ -32,8 +32,28 @@ export interface UpdateBrickAction {
   };
 }
 
+export interface BundleStartAction {
+  type: ActionType.BUNDLE_START;
+  payload: {
+    brickId: string;
+  };
+}
+
+export interface BundleCompleteAction {
+  type: ActionType.BUNDLE_COMPLETE;
+  payload: {
+    brickId: string;
+    bundle: {
+      code: string;
+      err: string;
+    };
+  };
+}
+
 export type Action =
   | MoveBrickAction
   | DeleteBrickAction
   | InsertBrickAfterAction
-  | UpdateBrickAction;
+  | UpdateBrickAction
+  | BundleStartAction
+  | BundleCompleteAction;
