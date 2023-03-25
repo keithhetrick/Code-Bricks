@@ -1,12 +1,13 @@
 import "bulmaswatch/superhero/bulmaswatch.min.css";
 // import CodeBrick from "./components/code-brick";
-import TextEditor from "./components/text-editor";
+// import TextEditor from "./components/text-editor";
+import BrickList from "./components/brick-list";
 
 const App = () => {
   return (
     <main>
       {/* <CodeBrick /> */}
-      <TextEditor />
+      <BrickList />
     </main>
   );
 };

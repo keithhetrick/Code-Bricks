@@ -48,7 +48,7 @@ const reducer = produce((state: BricksState = initialState, action: Action) => {
       const brick: Brick = {
         content: "",
         type: action.payload.type,
-        id: randomIdGenerator,
+        id: randomIdGenerator(),
       };
 
       state.data[brick.id] = brick;
@@ -67,10 +67,10 @@ const reducer = produce((state: BricksState = initialState, action: Action) => {
     default:
       return state;
   }
-});
+}, initialState);
 
 const randomIdGenerator = () => {
-  return Math.random().toString(36).substr(2, 5); // this line is fuego 🔥 🔥
+  return Math.random().toString(36).substring(2, 5);
 };
 
 export default reducer;
