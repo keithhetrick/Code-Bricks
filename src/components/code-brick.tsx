@@ -4,7 +4,9 @@ import CodeEditor from "./code-editor";
 import Preview from "./preview";
 import Resizable from "./resizable";
 import { useActions } from "../hooks/use-actions";
-import { useTypedSelector } from "../hooks/use-typed-selectors";
+import { useTypedSelector } from "../hooks/use-typed-selector";
+import { useCumulativeCode } from "../hooks/use-cumulative-code";
+import './code-brick.css'
 
 interface CodeBrickProps {
   brick: Brick;
@@ -13,65 +15,23 @@ interface CodeBrickProps {
 const CodeBrick: React.FC<CodeBrickProps> = ({ brick }) => {
   const { updateBrick, createBundle } = useActions();
   const bundle = useTypedSelector((state) => state.bundles[brick.id]);
-  const cumulativeCode = useTypedSelector((state) => {
-    const { data, order } = state.bricks;
-    const orderedBricks = order.map((id) => data[id]);
+  const cumulativeCode = useCumulativeCode(brick.id);
 
-    const showFunc = `
-        import _React from 'react';
-        import _ReactDOM from 'react-dom'
-        var show = (value) => {
-          const root = document.querySelector('#root')
-
-          if (typeof value === 'object') {
-            if (value.$$typeof && value.props) {
-              _ReactDOM.render(value, root)
-            } else {
-              root.innerHTML = JSON.stringify(value)
-            }
-          } else {
-            root.innerHTML = value
-          }
-        }
-      `;
-
-    const showFuncNoOperation = "var show = () => {}";
-
-    const cumulativeCode = [];
-    for (let c of orderedBricks) {
-      if (c.type === "code") {
-        if (c.id === brick.id) {
-          cumulativeCode.push(showFunc);
-        } else {
-          cumulativeCode.push(showFuncNoOperation);
-        }
-
-        cumulativeCode.push(c.content);
-      }
-      if (c.id === brick.id) {
-        break;
-      }
-    }
-    return cumulativeCode;
-  });
-
-  // DEBOUNCER
   useEffect(() => {
     if (!bundle) {
-      createBundle(brick.id, cumulativeCode.join("\n"));
+      createBundle(brick.id, cumulativeCode);
       return;
     }
 
     const timer = setTimeout(async () => {
-      createBundle(brick.id, cumulativeCode.join("\n"));
-    }, 1000);
+      createBundle(brick.id, cumulativeCode);
+    }, 750);
 
     return () => {
       clearTimeout(timer);
     };
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brick.id, cumulativeCode.join("\n"), createBundle]);
+  }, [cumulativeCode, brick.id, createBundle]);
 
   return (
     <Resizable direction="vertical">
@@ -88,17 +48,19 @@ const CodeBrick: React.FC<CodeBrickProps> = ({ brick }) => {
             onChange={(value) => updateBrick(brick.id, value)}
           />
         </Resizable>
+
         <div className="progress-wrapper">
           {!bundle || bundle.loading ? (
             <div className="progress-cover">
-              <progress className="progress is-small is-primary" max="100">
-                Loading
+              <progress id="progress-bar" className="progress is-small is-primary" max="100">
+                Loading...
               </progress>
             </div>
           ) : (
             <Preview code={bundle.code} err={bundle.err} />
           )}
         </div>
+
       </section>
     </Resizable>
   );

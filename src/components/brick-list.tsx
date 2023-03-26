@@ -1,7 +1,8 @@
 import { Fragment } from "react";
-import { useTypedSelector } from "../hooks/use-typed-selectors";
+import { useTypedSelector } from "../hooks/use-typed-selector";
 import BrickListItem from "./brick-list-items";
 import AddBrick from "./add-brick";
+import "./brick-list.css";
 
 const BrickList: React.FC = () => {
   const bricks = useTypedSelector(({ bricks: { order, data } }) =>
@@ -16,7 +17,7 @@ const BrickList: React.FC = () => {
   ));
 
   return (
-    <section>
+    <section className="brick-list">
       <AddBrick forceVisible={bricks.length === 0} newBrickId={null} />
       {renderedBricks}
     </section>

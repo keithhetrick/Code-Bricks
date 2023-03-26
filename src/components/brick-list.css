@@ -1,0 +1,7 @@
+.brick-list {
+  margin: 0 25px 50vh;
+}
+
+.react-draggable-transparent-selection .brick-list {
+  margin-bottom: 50vh;
+}

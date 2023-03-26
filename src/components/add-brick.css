@@ -36,4 +36,5 @@
 
 .add-brick .add-buttons button {
   margin: 0 20px;
+  gap: 5px;
 }
