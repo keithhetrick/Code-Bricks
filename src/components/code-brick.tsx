@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Brick } from "../state";
 import CodeEditor from "./code-editor";
 import Preview from "./preview";
-import Resizeable from "./resizeable";
+import Resizable from "./resizable";
 import { useActions } from "../hooks/use-actions";
 import { useTypedSelector } from "../hooks/use-typed-selectors";
 
@@ -13,16 +13,57 @@ interface CodeBrickProps {
 const CodeBrick: React.FC<CodeBrickProps> = ({ brick }) => {
   const { updateBrick, createBundle } = useActions();
   const bundle = useTypedSelector((state) => state.bundles[brick.id]);
+  const cumulativeCode = useTypedSelector((state) => {
+    const { data, order } = state.bricks;
+    const orderedBricks = order.map((id) => data[id]);
+
+    const showFunc = `
+        import _React from 'react';
+        import _ReactDOM from 'react-dom'
+        var show = (value) => {
+          const root = document.querySelector('#root')
+
+          if (typeof value === 'object') {
+            if (value.$$typeof && value.props) {
+              _ReactDOM.render(value, root)
+            } else {
+              root.innerHTML = JSON.stringify(value)
+            }
+          } else {
+            root.innerHTML = value
+          }
+        }
+      `;
+
+    const showFuncNoOperation = "var show = () => {}";
+
+    const cumulativeCode = [];
+    for (let c of orderedBricks) {
+      if (c.type === "code") {
+        if (c.id === brick.id) {
+          cumulativeCode.push(showFunc);
+        } else {
+          cumulativeCode.push(showFuncNoOperation);
+        }
+
+        cumulativeCode.push(c.content);
+      }
+      if (c.id === brick.id) {
+        break;
+      }
+    }
+    return cumulativeCode;
+  });
 
   // DEBOUNCER
   useEffect(() => {
     if (!bundle) {
-      createBundle(brick.id, brick.content);
+      createBundle(brick.id, cumulativeCode.join("\n"));
       return;
     }
 
     const timer = setTimeout(async () => {
-      createBundle(brick.id, brick.content);
+      createBundle(brick.id, cumulativeCode.join("\n"));
     }, 1000);
 
     return () => {
@@ -30,10 +71,10 @@ const CodeBrick: React.FC<CodeBrickProps> = ({ brick }) => {
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brick.id, brick.content, createBundle]);
+  }, [brick.id, cumulativeCode.join("\n"), createBundle]);
 
   return (
-    <Resizeable direction="vertical">
+    <Resizable direction="vertical">
       <section
         style={{
           height: "calc(100% - 10px)",
@@ -41,12 +82,12 @@ const CodeBrick: React.FC<CodeBrickProps> = ({ brick }) => {
           flexDirection: "row",
         }}
       >
-        <Resizeable direction="horizontal">
+        <Resizable direction="horizontal">
           <CodeEditor
             initialValue={brick.content}
             onChange={(value) => updateBrick(brick.id, value)}
           />
-        </Resizeable>
+        </Resizable>
         <div className="progress-wrapper">
           {!bundle || bundle.loading ? (
             <div className="progress-cover">
@@ -59,7 +100,7 @@ const CodeBrick: React.FC<CodeBrickProps> = ({ brick }) => {
           )}
         </div>
       </section>
-    </Resizeable>
+    </Resizable>
   );
 };
 
