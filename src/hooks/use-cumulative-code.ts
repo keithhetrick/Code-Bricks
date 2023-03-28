@@ -8,7 +8,7 @@ export const useCumulativeCode = (brickId: string) => {
     const showFunc = `
         import _React from 'react';
         import _ReactDOM from 'react-dom'
-        var show = (value) => {
+        var print = (value) => {
           const root = document.querySelector('#root')
 
           if (typeof value === 'object') {
@@ -23,7 +23,7 @@ export const useCumulativeCode = (brickId: string) => {
         }
       `;
 
-    const showFuncNoOperation = "var show = () => {}";
+    const showFuncNoOperation = "var print = () => {}";
 
     const cumulativeCode = [];
     for (let c of orderedBricks) {
